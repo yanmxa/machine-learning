@@ -15,6 +15,9 @@ def dJ(theta, X, y):
     grad = grad * (2 / len(X))
     return grad
 
+def dJ_vector(theta, X_b, y):
+    return X_b.T.dot(X_b.dot(theta) - y) * 2. / len(X_b)
+
 def gradient_descent(X, y, initial_theta, eta, n_iters=1e4, epsilon=1e-8):
     theta = initial_theta
     i_iters = 0

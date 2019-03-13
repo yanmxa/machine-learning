@@ -1,5 +1,5 @@
 import numpy as np
-from knn.metrics import r2_score
+from knn.metrics import r2_score, accuracy_score
 
 class LinearRegression():
     def __init__(self):
@@ -50,10 +50,44 @@ class LinearRegression():
         self.coef_ = self._theta[1:]
         return self
 
+    def fit_sgd(self, X_train, y_train, n_iters=5, t0=5, t1=50):
+        assert X_train.shape[0] == y_train.shape[0], 'the size of X_trian must be equal to the size of y_train.'
+        assert n_iters >= 1
+
+        def dJ_sgd(theta, X_b_i, y_i):
+            return X_b_i * (X_b_i.dot(theta) - y_i) * 2.0
+
+        def sgd(X_b, y, initial_theta, n_iters, t0=5, t1=50):
+
+            def learning_rate(t):
+                return t0 / (t1 + t)
+
+            theta = initial_theta
+            m = len(X_b)
+            for cur_iter in range(n_iters):
+                indexes = np.random.permutation(m)
+                X_b_new = X_b[indexes]
+                y_new = y[indexes]
+                for i in range(m):
+                    gradient = dJ_sgd(theta, X_b_new[i], y_new[i])
+                    theta = theta - learning_rate(cur_iter * m + i) * gradient
+
+            return theta
+
+        X_b = np.hstack([np.ones((len(X_train), 1)), X_train])
+        initial_theta = np.random.randn(X_b.shape[1])
+
+        self._theta = sgd(X_b, y_train, initial_theta, n_iters, t0, t1)
+        self.interception_ = self._theta[0]
+        self.coef_ = self._theta[1:]
+
+        return self
+
+
     def predict(self, X_predict):
-        assert self.intercept_ is not None and self.coef_ is not None, "must fit before predict!"
+        assert self.interception_ is not None and self.coef_ is not None, "must fit before predict!"
         assert X_predict.shape[1] == len(self.coef_), "the feature number of X_predict must be equal to X_train"
-        X_b = np.hstack(np.ones((len(X_predict), 1)), X_predict)
+        X_b = np.hstack([np.ones((len(X_predict), 1)), X_predict])
         return  X_b.dot(self._theta)
 
     def score(self, X_test, y_test):
@@ -149,5 +183,69 @@ def linear_regression_grad():
     print(lrg.coef_)
     print(lrg.interception_)
 
+'''
+    测试随机梯度下降
+'''
+def stochastic_grad():
+    m = 10000
+    x = np.random.normal(size=m)
+    X = x.reshape(-1, 1)
+    y = 4. * x + 3. + np.random.normal(0, 3, size=m)
+
+    lin_reg = LinearRegression()
+    lin_reg.fit_sgd(X, y, n_iters=2)
+
+    print('-----------------------')
+    from sklearn import datasets
+    boston = datasets.load_boston()
+    X = boston.data
+    y = boston.target
+    X = X[y < 50.0]
+    y = y[y < 50.0]
+
+    from knn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+    from sklearn.preprocessing import StandardScaler
+    standardScaler = StandardScaler()
+    standardScaler.fit(X_train)
+    X_train_standard = standardScaler.transform(X_train)
+    X_test_standard = standardScaler.transform(X_test)
+
+    lin_sgd = LinearRegression()
+    lin_sgd.fit_sgd(X_train_standard, y_train, n_iters=50)
+
+    print(lin_sgd.score(X_test_standard, y_test))
+
+'''
+    scikit-learn随机梯度下降
+'''
+def sklearn_stochastic_grad():
+
+    from sklearn import datasets
+    boston = datasets.load_boston()
+    X = boston.data
+    y = boston.target
+    X = X[y < 50.0]
+    y = y[y < 50.0]
+
+    from knn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+    from sklearn.preprocessing import StandardScaler
+    standardScaler = StandardScaler()
+    standardScaler.fit(X_train)
+    X_train_standard = standardScaler.transform(X_train)
+    X_test_standard = standardScaler.transform(X_test)
+
+    from sklearn.linear_model import SGDRegressor
+    sgd_reg = SGDRegressor(n_iter=500)
+    sgd_reg.fit(X_test_standard, y_test)
+    print(sgd_reg.score(X_test_standard, y_test))
+
+    lin_sgd = LinearRegression()
+    lin_sgd.fit_sgd(X_train_standard, y_train, n_iters=500)
+    print(lin_sgd.score(X_test_standard, y_test))
+
 if __name__ == '__main__':
-    linear_regression_grad()
+    sklearn_stochastic_grad()
