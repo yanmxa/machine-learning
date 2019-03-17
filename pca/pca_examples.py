@@ -93,6 +93,13 @@ def face_feature():
     print(pca.components_.shape)
     # 直接将主成分绘制出来
     plot_face(pca.components_[:36, :])
+    print(faces.keys())
+    print(faces.data.shape)
+    print(faces.images.shape)
+
+    random_indexes = np.random.permutation(len(faces.data))
+
+
 
 if __name__ == '__main__':
     face_feature()
