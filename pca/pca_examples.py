@@ -68,6 +68,11 @@ def denoise():
 def face_feature():
     from sklearn.datasets import fetch_lfw_people
     faces = fetch_lfw_people(data_home='./datasets')
+    print(faces.keys())
+    print(faces.data.shape)
+    print(faces.images.shape)
+
+    random_indexes = np.random.permutation(len(faces.data))
 
 
 
