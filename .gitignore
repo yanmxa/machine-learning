@@ -28,3 +28,4 @@ mvnw.cmd
 
 ### pycharm ###
 /*/__pycache__
+/pca/datasets/
