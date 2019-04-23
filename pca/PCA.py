@@ -138,7 +138,7 @@ def scikit_learn_pca_digits():
              [np.sum(pca.explained_variance_ratio_[:i+1]) for i in range(X_train.shape[1])])
     plt.show()
 
-    ''' sklearn 为我们提供了一个借口，只需要提供保留原来信息的比例，对于n_components的数值自行选择'''
+    ''' sklearn 为我们提供了一个接口，只需要提供保留原来信息的比例，对于n_components的数值自行选择'''
     pca = PCA(0.95) # 保留原数据95%以上的方差信息
     pca.fit(X_train)
     print(pca.n_components_)

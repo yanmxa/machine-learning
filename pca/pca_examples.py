@@ -102,7 +102,7 @@ def face_feature():
 
 
 if __name__ == '__main__':
-    face_feature()
+    denoise()
 
 
 

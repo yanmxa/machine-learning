@@ -1,2 +1,6 @@
-# MechineLearning
-## KNN
+# Machine Learning
+## knn
+## gradient
+## pca
+## linear regression
+## polynomial regression
