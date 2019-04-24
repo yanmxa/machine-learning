@@ -51,7 +51,7 @@ class LinearRegression():
         return self
 
     def fit_sgd(self, X_train, y_train, n_iters=5, t0=5, t1=50):
-        assert X_train.shape[0] == y_train.shape[0], 'the size of X_trian must be equal to the size of y_train.'
+        assert X_train.shape[0] == y_train.shape[0], 'the size of X_train must be equal to the size of y_train.'
         assert n_iters >= 1
 
         def dJ_sgd(theta, X_b_i, y_i):
