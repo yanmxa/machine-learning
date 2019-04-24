@@ -39,6 +39,7 @@ def r2_score(y_true, y_predict):
                    要想提高召回率的时候，掺杂的错误信息越少，
                    使用ROC曲线下面的面积 AUC [0,1]作为指标：TPR越大，FPR越小 => AUC越大
                    ROC和AUC对于有偏数据并不敏感，它主要应用于比较两个模型优劣
+        混淆矩阵   多分类的混淆矩阵
         
 '''
 def TN(y_true, y_predict):
@@ -98,5 +99,3 @@ def FPR(y_true, y_predict):
     except:
         return 0.
 
-
-from sklearn.metrics import precision_score
