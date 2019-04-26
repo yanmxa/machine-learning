@@ -6,6 +6,8 @@
 ## polynomial regression
 ## logistic regression
 ## svm
+## decision tree
+## ensemble
 
 
 
