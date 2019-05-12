@@ -8,6 +8,10 @@
 ## svm
 ## decision tree
 ## ensemble
+## native bayes
+## Apriori
+## page rank
+## em
 
 
 
